@@ -1,0 +1,88 @@
+#Import Libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# -----------------------------
+# Load Dataset
+# -----------------------------
+data = pd.read_csv("Unemployment_Rate_upto_11_2020.csv")
+
+# Display first 5 rows
+print("First 5 Rows:")
+print(data.head())
+
+# Dataset Information
+print("\nDataset Info:")
+print(data.info())
+
+# Statistical Summary
+print("\nStatistical Summary:")
+print(data.describe())
+
+# Check Missing Values
+print("\nMissing Values:")
+print(data.isnull().sum())
+
+# -----------------------------
+# Data Cleaning
+# -----------------------------
+# Remove extra spaces from column names
+data.columns = data.columns.str.strip()
+
+# Convert Date column to datetime
+data['Date'] = pd.to_datetime(data['Date'], dayfirst=True)
+
+# -----------------------------
+# Data Visualization
+# -----------------------------
+
+# 1️⃣ Bar Plot – Unemployment Rate by Region
+plt.figure(figsize=(10,6))
+sns.barplot(x="Region", y="Estimated Unemployment Rate (%)", data=data)
+plt.xticks(rotation=90)
+plt.title("Unemployment Rate by Region")
+plt.tight_layout()
+plt.show()
+
+# 2️⃣ Line Plot – Unemployment Trend Over Time
+plt.figure(figsize=(10,6))
+sns.lineplot(x="Date", y="Estimated Unemployment Rate (%)", data=data)
+plt.title("Unemployment Rate Trend Over Time")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# 3️⃣ Scatter Plot – Labour Participation vs Unemployment
+plt.figure(figsize=(8,6))
+sns.scatterplot(
+    x="Estimated Labour Participation Rate (%)",
+    y="Estimated Unemployment Rate (%)",
+    hue="Region",
+    data=data
+)
+plt.title("Labour Participation vs Unemployment Rate")
+plt.tight_layout()
+plt.show()
+
+# 4️⃣ Box Plot – Distribution of Unemployment Rate
+plt.figure(figsize=(10,6))
+sns.boxplot(x="Region", y="Estimated Unemployment Rate (%)", data=data)
+plt.xticks(rotation=90)
+plt.title("Distribution of Unemployment Rate by Region")
+plt.tight_layout()
+plt.show()
+
+# 5️⃣ Heatmap – Unemployment Rate by Region and Date
+pivot = data.pivot_table(
+    values="Estimated Unemployment Rate (%)",
+    index="Region",
+    columns="Date"
+)
+
+plt.figure(figsize=(12,7))
+sns.heatmap(pivot, cmap="coolwarm")
+plt.title("Heatmap of Unemployment Rate")
+plt.tight_layout()
+plt.show()
